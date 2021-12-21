@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2021-11-27T16:43:02Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.5.1"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "adapter"
+        },
+        "Owner": "Nikodem Bartnik <nikodem.bartnik@gmail.com>",
+        "Size": {
+            "X": 25.634,
+            "Y": 25.451
+        }
+    }
+}

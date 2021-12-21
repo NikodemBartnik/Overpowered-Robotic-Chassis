@@ -1,0 +1,6 @@
+Partlist exported from D:/projekty/t motor test/chassis/Adapter pcb/adapter.sch at 2021-11-27 17:43
+
+Qty Value Device    Package  Parts                  Description          MF MPN     OC_FARNELL OC_NEWARK POPULARITY
+3         PINHD-1X2 1X02     CAN_IN, CAN_O1, CAN_O2 PIN HEADER                                           98        
+1         W237-102  W237-102 X1                     WAGO SCREW CLAMP        237-102 unknown    70K9898   32        
+2   XT30  XT30      XT30U-F  U$1, U$2               XT30 Power connector                                           
