@@ -54,24 +54,31 @@ def connectClick():
 
 def generateSlider(min, max, init_val, val, func):
     slider = tk.Scale(
-    root,
-    from_=min,
-    to=max,
-    length=500,
-    orient='horizontal',
-    resolution=0.01,
-    variable=val
+        root,
+        from_=min,
+        to=max,
+        length=500,
+        orient='horizontal',
+        resolution=0.01,
+        variable=val
     )
     slider.bind('<ButtonRelease-1>', func)
     slider.set(init_val)
     return slider
 
+
 def sendData():
     if ser.is_open:
-        print('{: .2f}'.format(value_position.get()) + ',' + '{: .2f}'.format(value_speed.get()) + ',' + '{: .2f}'.format(value_kp.get()) + ',' +
-        '{: .2f}'.format(value_kd.get()) + ',' + '{: .2f}'.format(value_torque.get()))
-        ser.write(bytes('{: .2f}'.format(value_position.get()) + ',' + '{: .2f}'.format(value_speed.get()) + ',' + '{: .2f}'.format(value_kp.get()) + ',' +
-        '{: .2f}'.format(value_kd.get()) + ',' + '{: .2f}'.format(value_torque.get())+ '\n', encoding='utf-8'))
+        prepared_payload = '{: .2f},{: .2f},{: .2f},{: .2f},{: .2f}\n'.format(
+            value_torque.get(), 
+            value_position.get(), 
+            value_speed.get(), 
+            value_kp.get(), 
+            value_kd.get()
+        )
+
+        print(prepared_payload)
+        ser.write(bytes(prepared_payload, encoding='utf-8'))
         
 
 def readFromSerial():
