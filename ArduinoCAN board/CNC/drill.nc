@@ -53,13 +53,13 @@ G94
 G01 F300.00
 
 M5
-G00 Z15.0000
+G00 Z5.0000
 T1
 G00 X0.0000 Y0.0000                
 M6
 (MSG, Change to Tool Dia = 0.9000 ||| Total drills for tool T1 = 74)
 M0
-G00 Z15.0000
+G00 Z5.0000
 
 G01 F300.00
 M03 S1000
