@@ -30,14 +30,13 @@ void setup() {
   zeroMotor(1);
   enterMotorMode(2);
   zeroMotor(2);
-  pinMode(4, OUTPUT);
-  delay(5000);
-
+  delay(500);
+  Serial.println("test1");
 }
 
 void loop() {
   readCommand();
-
+  readFromMotor();
 }
 
 void enterMotorMode(int mot_id){
@@ -109,38 +108,75 @@ int float_to_uint(float x, float x_min, float x_max, int bits){
 }
 
 
+float uint_to_float(unsigned int x_int, float x_min, float x_max, int bits){
+  float span = x_max - x_min;
+  float offset = x_min;
+  float pgg = 0;
+  if(bits == 12){
+    pgg = ((float)x_int)*span/4095.0 + offset;
+  }else if(bits == 16){
+    pgg = ((float)x_int)*span/65535.0 + offset;
+  }
+  return pgg;
+}
+
+
 void readCommand(){
   if(Serial.available() > 0){
     String command = Serial.readStringUntil('\n');
     int breakPosition = command.indexOf(" ");
-    int speedA = NULL;
-    int speedB = NULL;
+    float speedA = NULL;
+    float speedB = NULL;
 
     String firstLetter = command.substring(0, 1);
     if(firstLetter.equals("M")){
       Serial.println("Mode selection");
-      commandNumber = command.substring(1, 2);
+      String commandNumber = command.substring(1, 2);
       if(commandNumber.equals("1")){
         
       }else if(commandNumber.equals("2")){
 
       }
       
-      
     }else if(firstLetter.equals("A")){
-      speedA = (command.substring(1, breakPosition)).toInt();
+      speedA = (command.substring(1, breakPosition)).toFloat();
       Serial.print("Speed A: ");
       Serial.print(speedA);
       Serial.println("RPM");
-      sendToMotor(1, 0, speedA, 0, 0.1, 0);
-
+      if(speedA == 0){
+      sendToMotor(1, 0, speedA, 0, 0, 0);  
+      }else{
+      sendToMotor(1, 0, speedA, 0, 10, 0);
+      }
       if(command.substring(breakPosition+1, breakPosition+2).equals("B")){
-      speedB = (command.substring(breakPosition+2, command.length())).toInt();
+      speedB = (command.substring(breakPosition+2, command.length())).toFloat();
       Serial.print("Speed B: ");
       Serial.print(speedB);
       Serial.println("RPM");
-      sendToMotor(2, 0, SpeedB, 0, 0.1, 0);
+      if(speedA == 0){
+      sendToMotor(2, 0, speedB, 0, 0, 0);  
+      }else{
+      sendToMotor(2, 0, -speedB, 0, 10, 0);
+      }
     }
     }
+  }
+}
+
+
+void readFromMotor(){
+  if (mcp2515.readMessage(&canMsg) == MCP2515::ERROR_OK) {
+    Serial.print(canMsg.data[0], HEX); // print ID
+    Serial.print(" "); 
+   // Serial.print(canMsg.can_dlc, HEX); // print DLC
+   // Serial.print(" ");
+
+    Serial.print(uint_to_float((canMsg.data[1] << 8) | canMsg.data[2], P_MIN, P_MAX, 16));
+    Serial.print(",");
+    Serial.print(uint_to_float((canMsg.data[3] << 4) | (canMsg.data[4]>>4), V_MIN, V_MAX, 12));
+    Serial.print(",");
+    Serial.print(uint_to_float(((canMsg.data[4] &0xF)<<8) | canMsg.data[5], P_MIN, P_MAX, 12));
+    Serial.println();      
+   
   }
 }
